@@ -24,7 +24,7 @@ jobs:
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
 
       - name: Set cache name
-        run: echo "CACHE_NAME=cache-packages-${{ inputs.event-ref }}-$(date +'%-H%M%S')" >> $GITHUB_ENV
+        run: echo "CACHE_NAME=cache-packages-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
            
   create:
     needs: variables
