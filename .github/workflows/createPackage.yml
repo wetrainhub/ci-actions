@@ -52,8 +52,9 @@ jobs:
       
       - name: copy files for cache
         run: |
-          find **/src -type f -name "*.nupkg" -exec cp {} /cache \;
+          find . -type f -name "*.nupkg" -exec cp {} /cache \;
           cp nuget.config /cache
+          ls
           
       - name: Cache
         uses: actions/cache@v3        
