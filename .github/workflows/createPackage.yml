@@ -60,7 +60,7 @@ jobs:
     needs: create
     steps:   
      - name: Set cache name
-        run: |
+       run: |
           echo "CACHE_NAME="${{ env.CACHE_NAME }}${{ github.ref_name }}$(date +'%Y%m%d%H%M%S') >> $env:GITHUB_ENV
 
      - name: Setup .NET
