@@ -71,9 +71,9 @@ jobs:
          path: ~/
          key: ${{ env.CACHE_NAME }}    
 
-     - name: Delete packages
+     - name: Delete release packages
        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
-       id: setmatrix
+       id: delete nuget
        with:
           package-token: ${{ github.token }}
           package-version: ${{ github.ref_name }}
