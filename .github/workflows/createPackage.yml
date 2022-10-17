@@ -54,8 +54,10 @@ jobs:
         uses: actions/cache@v3        
         with:        
          path: 
-          /src/*/*/Release
-          nuget.config
+          /src
+          !~/.git
+          !~/.github
+          !~/test
          key: ${{ inputs.ref-cache-key }}      
         
   publish:
