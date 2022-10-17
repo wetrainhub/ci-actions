@@ -79,6 +79,10 @@ jobs:
          path: /cache
          key: ${{ inputs.ref-cache-key }}    
 
+     - name: List files
+       run: |
+          ls ${{ github.workspace }}
+          
      - name: Delete release packages
        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
        id: delete-nuget
