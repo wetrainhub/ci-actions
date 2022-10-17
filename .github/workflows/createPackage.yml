@@ -12,22 +12,19 @@ on:
         type: string
 
 env:
-  CACHE_NAME: cache-packages
+  CACHE_NAME: "cache-packages-${{ github.ref_name }}-$(date +'%-H%M%S')"
   ALPHA_RELEASE: 0.0.1
 
 jobs:
-  version:
+  set-enviroment-variables:
     runs-on: ubuntu-latest
     steps:
       - name: Set current date as env variable
         run: echo "ALPHA_RELEASE=$(date +'%-H%M%S')" >> $GITHUB_ENV
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
-        
-      - name: Set cache name
-        run: echo "CACHE_NAME=cache-packages-${{ github.ref_name }}-$(date +'%-H%M%S')" >> $GITHUB_ENV
-           
+          
   create:
-    needs: version
+    needs: set-enviroment-variables
     runs-on: ubuntu-latest
     steps:     
         
