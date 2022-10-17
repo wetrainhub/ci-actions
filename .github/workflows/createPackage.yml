@@ -14,13 +14,18 @@ on:
         description: 'cache-key'
         required: true
         type: string
-      ref-alpha-release:
-        description: 'alpha-release-key'
-        required: true
-        type: string
 
-jobs:    
+jobs:
+  variables:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      alpha-release: ${{ steps.alpha.outputs.alpha }}
+    steps:
+      - id: alpha
+        run: echo "version=$(date +'%-H%M%S')" >> $GITHUB_OUTPUT
   create:
+    needs: variables
     runs-on: ubuntu-latest
     steps:     
       - uses: actions/checkout@v3
@@ -41,8 +46,8 @@ jobs:
           
       - name: Create alpha Package
         run: |
-          echo "a${{ inputs.ref-alpha-release }}"
-          dotnet pack --configuration Release --version-suffix "alpha.${{ inputs.ref-alpha-release }}"
+          echo "a${{ needs.variables.outputs.alpha-release }}"
+          dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
         
       - name: Cache
@@ -55,6 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: create
     steps:   
+    
      - name: Setup .NET
        uses: actions/setup-dotnet@v2
        with:
