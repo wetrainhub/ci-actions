@@ -21,7 +21,6 @@ on:
 
 jobs:    
   create:
-    needs: variables
     runs-on: ubuntu-latest
     steps:     
       - name: Set cache name
