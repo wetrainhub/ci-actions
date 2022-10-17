@@ -76,7 +76,7 @@ jobs:
      - name: Restore
        uses: actions/cache@v3
        with:
-         path: /cache
+         path: ${{ github.workspace }}/cache
          key: ${{ inputs.ref-cache-key }}    
 
      - name: List files
