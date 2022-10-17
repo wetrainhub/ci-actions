@@ -86,11 +86,7 @@ jobs:
           package-token: ${{ github.token }}
           package-version: ${{ github.ref_name }}
        if: startsWith(inputs.event-ref, 'refs/tags/v')
-       
-     - name: copy files for cache
-       run: |
-          ls ${{ github.workspace }}/cache
-         
+               
      - name: Publish
-       run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json" --skip-duplicate -n
+       run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json" --skip-duplicate -n
 
