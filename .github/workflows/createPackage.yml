@@ -14,16 +14,12 @@ on:
         description: 'cache-key'
         required: true
         type: string
-env:
-  ALPHA_RELEASE: 0.0.1
+      ref-alpha-release:
+        description: 'alpha-release-key'
+        required: true
+        type: string
 
-jobs:
-  variables:
-    steps:
-      - name: Set current date as env variable
-        run: echo "ALPHA_RELEASE=$(date +'%-H%M%S')" >> $GITHUB_ENV
-        if: startsWith(inputs.event-ref, 'refs/tags/v') != true
-          
+jobs:    
   create:
     needs: variables
     runs-on: ubuntu-latest
@@ -50,8 +46,8 @@ jobs:
           
       - name: Create alpha Package
         run: |
-          echo "a${{ env.ALPHA_RELEASE }}"
-          dotnet pack --configuration Release --version-suffix "alpha.${{ env.ALPHA_RELEASE }}"
+          echo "a${{ inputs.ref-alpha-release }}"
+          dotnet pack --configuration Release --version-suffix "alpha.${{ inputs.ref-alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
         
       - name: Cache
