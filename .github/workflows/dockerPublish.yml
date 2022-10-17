@@ -20,11 +20,11 @@ on:
         description: 'env.registry'
         required: true
         type: string
-      username:  
+      registry-username:  
         description: 'github.actor'
         required: true
         type: string
-      password:  
+      registry-password:  
         description: 'secrets.GITHUB_TOKEN'
         required: true
         type: string
@@ -64,8 +64,8 @@ jobs:
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
           registry: ${{ inputs.registry }}
-          username: ${{ inputs.username }}
-          password: ${{ inputs.password }}
+          username: ${{ inputs.registry-username }}
+          password: ${{ inputs.registry-password }}
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
