@@ -88,5 +88,5 @@ jobs:
        if: startsWith(inputs.event-ref, 'refs/tags/v')
          
      - name: Publish
-       run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate -n
+       run: dotnet nuget push "*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json" --skip-duplicate -n
 
