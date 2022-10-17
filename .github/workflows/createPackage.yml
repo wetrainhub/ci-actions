@@ -50,12 +50,11 @@ jobs:
           dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
       
-      - name: copy files for cache
+      - name: Copy files for cache
         run: |
           mkdir -p ${{ github.workspace }}/cache
           find . -type f -name "*.nupkg" -exec cp {} ${{ github.workspace }}/cache \;
           cp nuget.config ${{ github.workspace }}/cache
-          ls ${{ github.workspace }}/cache
           
       - name: Cache
         uses: actions/cache@v3        
@@ -78,10 +77,6 @@ jobs:
        with:
          path: ${{ github.workspace }}/cache
          key: ${{ inputs.ref-cache-key }}    
-
-     - name: List files
-       run: |
-          ls ${{ github.workspace }}
           
      - name: Delete release packages
        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
