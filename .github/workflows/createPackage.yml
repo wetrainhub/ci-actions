@@ -54,10 +54,10 @@ jobs:
         uses: actions/cache@v3        
         with:        
          path: 
-          /src
-          !~/.git
-          !~/.github
-          !~/test
+          ~/
+          !.git
+          !.github
+          !test
          key: ${{ inputs.ref-cache-key }}      
         
   publish:
