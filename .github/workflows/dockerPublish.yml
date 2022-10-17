@@ -29,7 +29,6 @@ on:
         description: 'secrets.GITHUB_TOKEN'
         required: true
         type: string
-        default: ${{ secrets.GITHUB_TOKEN }}
         
 jobs:
   build:
