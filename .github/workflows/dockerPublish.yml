@@ -18,7 +18,7 @@ on:
         type: string
       registry:  
         description: 'env.registry'
-        required: true
+        required: false
         type: string
         default: ghcr.io
       registry-username:  
