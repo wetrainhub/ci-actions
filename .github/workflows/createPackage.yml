@@ -73,7 +73,7 @@ jobs:
 
      - name: Delete release packages
        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
-       id: delete nuget
+       id: delete-nuget
        with:
           package-token: ${{ github.token }}
           package-version: ${{ github.ref_name }}
