@@ -69,7 +69,15 @@ jobs:
        uses: actions/cache@v3
        with:
          path: ~/
-         key: ${{ env.CACHE_NAME }}      
+         key: ${{ env.CACHE_NAME }}    
+
+     - name: Delete packages
+       uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
+       id: setmatrix
+       with:
+          package-token: ${{ github.token }}
+          package-version: ${{ github.ref_name }}
+       if: startsWith(inputs.event-ref, 'refs/tags/v')
          
      - name: Publish
        run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate -n
