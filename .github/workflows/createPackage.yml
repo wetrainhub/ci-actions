@@ -12,7 +12,7 @@ on:
         type: string
 
 env:
-  CACHE_NAME: cache-packages
+  CACHE_NAME: "cache-packages"
   ALPHA_RELEASE: 0.0.1
 
 jobs:
@@ -24,7 +24,9 @@ jobs:
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
 
       - name: Set cache name
-        run: echo "CACHE_NAME=cache-packages-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: |
+          echo ("CACHE_NAME=" + $env:GITHUB_REF.replace('refs/heads/', '')) >> $env:GITHUB_ENV
+          echo ("CACHE_NAME=" + $(date +'%Y%m%d%H%M%S') >> $env:GITHUB_ENV
            
   create:
     needs: variables
@@ -79,7 +81,7 @@ jobs:
        id: delete-nuget
        with:
           package-token: ${{ github.token }}
-          package-version: ${{ inputs.event-ref }}
+          package-version: ${{ github.ref_name }}
        if: startsWith(inputs.event-ref, 'refs/tags/v')
          
      - name: Publish
