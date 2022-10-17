@@ -29,6 +29,10 @@ on:
         description: 'secrets.GITHUB_TOKEN'
         required: true
         type: string
+      dockerfile:  
+        description: 'path to dockerfile'
+        required: true
+        type: string
         
 jobs:
   build:
@@ -88,7 +92,7 @@ jobs:
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
-          file: src/DSSL.Service.Blockchain/Dockerfile
+          file: ${{ inputs.dockerfile }}
           push: ${{ inputs.event-name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
