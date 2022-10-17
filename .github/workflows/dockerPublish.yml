@@ -15,20 +15,7 @@ on:
       event-name:  
         description: 'github.event_name'
         required: true
-        type: string
-      registry:  
-        description: 'env.registry'
-        required: true
-        type: string
-      registry-username:  
-        description: 'github.actor'
-        required: true
-        type: string
-      registry-password:  
-        description: 'secrets.GITHUB_TOKEN'
-        required: true
-        type: string
-        
+        type: string        
 jobs:
   build:
 
@@ -63,9 +50,9 @@ jobs:
         if: inputs.event-name != 'pull_request'
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
-          registry: ${{ inputs.registry }}
-          username: ${{ inputs.registry-username }}
-          password: ${{ inputs.registry-password }}
+          registry: ${{ secrets.registry }}
+          username: ${{ secrets.registry-username }}
+          password: ${{ secrets.registry-password }}
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -73,7 +60,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ inputs.registry }}/${{ inputs.image-name }}          
+          images: ${{ secrets.registry }}/${{ inputs.image-name }}          
           tags: |
             type=ref,event=branch,suffix=-beta
             type=semver,pattern={{version}}
