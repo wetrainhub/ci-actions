@@ -19,7 +19,6 @@ env:
 
 jobs:
   variables:
-    runs-on: ubuntu-latest
     steps:
       - name: Set current date as env variable
         run: echo "ALPHA_RELEASE=$(date +'%-H%M%S')" >> $GITHUB_ENV
