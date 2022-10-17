@@ -52,14 +52,14 @@ jobs:
       
       - name: copy files for cache
         run: |
-          find . -type f -name "*.nupkg" -exec cp {} /cache \;
-          cp nuget.config /cache
+          find . -type f -name "*.nupkg" -exec cp {} /home/runner/work/cache \;
+          cp nuget.config /home/runner/work/cache
           ls
           
       - name: Cache
         uses: actions/cache@v3        
         with:        
-         path: ~/cache
+         path: /home/runner/work/cache
          key: ${{ inputs.ref-cache-key }}      
         
   publish:
@@ -75,7 +75,7 @@ jobs:
      - name: Restore
        uses: actions/cache@v3
        with:
-         path: ~/cache
+         path: /home/runner/work/cache
          key: ${{ inputs.ref-cache-key }}    
 
      - name: Delete release packages
