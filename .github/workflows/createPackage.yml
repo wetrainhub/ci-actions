@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
-      alpha-release: ${{ steps.alpha.outputs.alpha }}
+      alpha-release: ${{ steps.alpha.outputs.version }}
     steps:
       - id: alpha
         run: echo "version=$(date +'%-H%M%S')" >> $GITHUB_OUTPUT
