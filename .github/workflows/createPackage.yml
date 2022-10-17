@@ -49,11 +49,18 @@ jobs:
           echo "a${{ needs.variables.outputs.alpha-release }}"
           dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
-        
+      
+      - name: copy files for cache
+        run: |
+          mkdir cache
+          find . -type f -name "*.txt" -exec cp '{}' /cache  \;
+          cp nuget.config /cache
+          
+          
       - name: Cache
         uses: actions/cache@v3        
         with:        
-         path: ~/
+         path: /cache
          key: ${{ inputs.ref-cache-key }}      
         
   publish:
@@ -69,7 +76,7 @@ jobs:
      - name: Restore
        uses: actions/cache@v3
        with:
-         path: ~/
+         path: /cache
          key: ${{ inputs.ref-cache-key }}    
 
      - name: Delete release packages
@@ -81,5 +88,5 @@ jobs:
        if: startsWith(inputs.event-ref, 'refs/tags/v')
          
      - name: Publish
-       run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate -n
+       run: dotnet nuget push ".nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" --skip-duplicate -n
 
