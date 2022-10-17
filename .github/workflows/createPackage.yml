@@ -22,6 +22,7 @@ jobs:
       - name: Set current date as env variable
         run: echo "ALPHA_RELEASE=$(date +'%-H%M%S')" >> $GITHUB_ENV
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
+        
       - name: Set cache name
         run: echo "CACHE_NAME=cache-packages-${{ github.ref_name }}-$(date +'%-H%M%S')" >> $GITHUB_ENV
            
