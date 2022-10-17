@@ -60,7 +60,7 @@ jobs:
       - name: Cache
         uses: actions/cache@v3        
         with:        
-         path: /home/runner/work/cache
+         path: ${{ github.workspace }}/cache
          key: ${{ inputs.ref-cache-key }}      
         
   publish:
@@ -76,7 +76,7 @@ jobs:
      - name: Restore
        uses: actions/cache@v3
        with:
-         path: /home/runner/work/cache
+         path: /cache
          key: ${{ inputs.ref-cache-key }}    
 
      - name: Delete release packages
