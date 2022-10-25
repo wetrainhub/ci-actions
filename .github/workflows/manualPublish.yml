@@ -9,7 +9,7 @@ on:
   workflow_call:
     inputs:
       zip-name:  
-        description: 'owner/repo'
+        description: 'Output zip file name'
         required: true
         type: string
       project-name:  
