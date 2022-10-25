@@ -1,0 +1,49 @@
+name: Docker Publish
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  workflow_call:
+    inputs:
+      zip-name:  
+        description: 'owner/repo'
+        required: true
+        type: string
+      project-name:  
+        description: 'csproj name'
+        required: true
+        type: string        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nowsprinting/check-version-format-action@v3
+        id: version
+        with:
+          prefix: 'v'
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Build
+        run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64 -p:version="${{ steps.version.outputs.full_without_prefix }}"
+
+      - name: Create zip
+        uses: ihiroky/archive-action@v1
+        with:
+          root_dir: output
+          file_path: ${{ inputs.zip-name }}.zip
+      
+      - uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: ${{ inputs.zip-name }}.zip
+          out_dir: ${{ steps.version.outputs.full_without_prefix }}
