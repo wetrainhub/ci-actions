@@ -46,4 +46,4 @@ jobs:
           space_name: ${{ secrets.DO_SPACE_NAME }}
           space_region: ${{ secrets.DO_SPACE_REGION }}
           source: ${{ inputs.zip-name }}.zip
-          out_dir: ${{ steps.version.outputs.full_without_prefix }}
+          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
