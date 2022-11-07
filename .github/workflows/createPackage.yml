@@ -87,5 +87,7 @@ jobs:
        if: startsWith(inputs.event-ref, 'refs/tags/v')
                
      - name: Publish
-       run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json" --skip-duplicate -n
+       run: |
+            dotnet nuget add source --username USERNAME --password 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 --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json"
+            dotnet nuget push "**/*.nupkg" --source "github" --skip-duplicate -n
 
