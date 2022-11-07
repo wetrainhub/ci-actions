@@ -88,6 +88,6 @@ jobs:
                
      - name: Publish
        run: |
-            dotnet nuget add source --username USERNAME --password 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 --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json"
+            dotnet nuget add source --username USERNAME --password  --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Digital-Secure-Systems-Limited/index.json"
             dotnet nuget push "**/*.nupkg" --source "github" --skip-duplicate -n
 
