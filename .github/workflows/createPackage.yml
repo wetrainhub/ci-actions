@@ -37,6 +37,10 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}    
           
+          
+      - name: Add private GitHub registry to NuGet
+        run: nuget sources add -name "github" -Source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -Username ${{ github.repository_owner }} -Password ${{ secrets.GITHUB_TOKEN }}
+        
       - name: Restore dependencies
         run: dotnet restore --no-cache --force
       
