@@ -3,11 +3,11 @@ on:
   workflow_call:
     inputs:
       sonarProjectKey:  
-        description: 'github.event.ref'
+        description: 'Project key'
         required: true
         type: string
       sonarProjectName:  
-        description: 'github.ref_name'
+        description: 'project name'
         required: true
         type: string
      
