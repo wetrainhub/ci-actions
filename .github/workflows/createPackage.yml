@@ -84,7 +84,7 @@ jobs:
        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
        id: delete-nuget
        with:
-          package-token: ${{ github.token }}
+          package-token: ${{ secrets.GITHUB_TOKEN }}
           package-version: ${{ github.ref_name }}
        if: startsWith(inputs.event-ref, 'refs/tags/v')
                
