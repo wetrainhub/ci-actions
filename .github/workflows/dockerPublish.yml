@@ -85,7 +85,7 @@ jobs:
             type=raw,value=latest,enable=false
 
       - name: add private GitHub registry to NuGet
-        run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+        run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
