@@ -35,6 +35,9 @@ jobs:
       - name: add private GitHub registry to NuGet
         run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
       
+      - name: add nuget feed
+        run: dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      
       - name: Build
         run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64 -p:version="${{ steps.version.outputs.full_without_prefix }}"
 
