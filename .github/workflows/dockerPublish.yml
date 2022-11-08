@@ -69,8 +69,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{ inputs.registry }}
-          username: ${{ secret.DSSL_USERNAME }}
-          password: ${{ secret.DSSL_DOCKER }}
+          username: ${{ secrets.DSSL_USERNAME }}
+          password: ${{ secrets.DSSL_DOCKER }}
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
