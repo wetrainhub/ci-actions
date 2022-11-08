@@ -14,14 +14,6 @@ on:
         description: 'cache-key'
         required: true
         type: string
-      username:
-        description: 'username'
-        required: true
-        type: string
-      username-access-token:
-        description: 'token'
-        required: true
-        type: string
 jobs:
   variables:
     runs-on: ubuntu-latest
@@ -42,7 +34,7 @@ jobs:
           dotnet-version: 6.0.x 
           
       - name: Add private GitHub registry to NuGet
-        run: dotnet nuget update source github --username ${{ inputs.username }} --password ${{ inputs.username-access-token }}  --store-password-in-clear-text
+        run: dotnet nuget update source github --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
         
       - name: Restore dependencies
         run: dotnet restore --no-cache --force
