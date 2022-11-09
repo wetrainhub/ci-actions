@@ -43,7 +43,7 @@ jobs:
         run: |
           packages=`ls -m ${{ github.workspace }}/src/`
           echo $packages
-          echo "package_names=`$packages`" >> $GITHUB_OUTPUT
+          echo "package_names=$packages" >> $GITHUB_OUTPUT
           
       - name: Restore dependencies
         run: dotnet restore --no-cache --force
@@ -60,8 +60,10 @@ jobs:
           echo "alpha.${{ needs.variables.outputs.alpha-release }}"
           dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
-      
-
+        
+      - name: check delete
+        run: |
+          echo ${{ steps.packagenames.outputs.package_names }}
           
       - name: Delete release packages
         uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
@@ -71,6 +73,8 @@ jobs:
           package-version: ${{ github.ref_name }}
           package-names: ${{ steps.packagenames.outputs.package_names }}
         if: startsWith(inputs.event-ref, 'refs/tags/v')
+      
+      
       
       - name: Copy files for cache
         run: |
