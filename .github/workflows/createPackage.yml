@@ -42,7 +42,7 @@ jobs:
         id: packagenames
         run: |
           packages=`ls -m ${{ github.workspace }}/src/`
-          echo $packages
+          packages=$(echo $packages | tr '\n' ' ')
           echo "package_names=$packages" >> $GITHUB_OUTPUT
           
       - name: Restore dependencies
