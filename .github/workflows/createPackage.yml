@@ -57,7 +57,8 @@ jobs:
       - name: Get folders in src
         id: packagenames
         run: |
-          echo "package_names=$(echo ls -m ${{ github.workspace }}/src)" >> $GITHUB_OUTPUT
+          packages=`ls -m ${{ github.workspace }}/src/`
+          echo "package_names=$packages" >> $GITHUB_OUTPUT
           
       - name: Delete release packages
         uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
