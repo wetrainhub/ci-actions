@@ -23,6 +23,8 @@ jobs:
     steps:
       - id: alpha
         run: echo "version=$(date +'%-H%M%S')" >> $GITHUB_OUTPUT
+        
+       
   create:
     needs: variables
     runs-on: ubuntu-latest
@@ -52,6 +54,21 @@ jobs:
           dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
         if: startsWith(inputs.event-ref, 'refs/tags/v') != true
       
+      - name: Get folders in src
+        id: packagenames
+        run: |
+          run: echo "package_names=$(echo ls -m ${{ github.workspace }}/src" >> $GITHUB_OUTPUT
+          ls -m ${{ github.workspace }}/src
+      
+      - name: Delete release packages
+        uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
+        id: delete-nuget
+        with:
+          package-token: ${{ secrets.DSSL_TOKEN }}
+          package-version: ${{ github.ref_name }}
+          package-names: ${{ steps.packagenames.outputs.package_names }}
+        if: startsWith(inputs.event-ref, 'refs/tags/v')
+      
       - name: Copy files for cache
         run: |
           mkdir -p ${{ github.workspace }}/cache
@@ -80,13 +97,5 @@ jobs:
          path: ${{ github.workspace }}/cache
          key: ${{ inputs.ref-cache-key }}    
           
-     - name: Delete release packages
-       uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
-       id: delete-nuget
-       with:
-          package-token: ${{ secrets.DSSL_TOKEN }}
-          package-version: ${{ github.ref_name }}
-       if: startsWith(inputs.event-ref, 'refs/tags/v')
-               
      - name: Publish
        run: dotnet nuget push "**/*.nupkg" --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}" --skip-duplicate -n
