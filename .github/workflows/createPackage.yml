@@ -43,7 +43,7 @@ jobs:
         run: |
           packages=`ls -m ${{ github.workspace }}/src/`
           echo $packages
-          echo "package_names=$packages" >> $GITHUB_OUTPUT
+          echo "package_names=`$packages`" >> $GITHUB_OUTPUT
           
       - name: Restore dependencies
         run: dotnet restore --no-cache --force
