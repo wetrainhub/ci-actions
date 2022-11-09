@@ -58,6 +58,7 @@ jobs:
         id: packagenames
         run: |
           packages=`ls -m ${{ github.workspace }}/src/`
+          echo $packages
           echo "package_names=$packages" >> $GITHUB_OUTPUT
           
       - name: Delete release packages
