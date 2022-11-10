@@ -40,7 +40,7 @@ jobs:
           dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
 
       - name: Build
-        run:  msbuild ../src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj -t:restore /t:Build;Publish /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin/Publish/x64
+        run:  msbuild ${{ github.workspace }}/../src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj -t:restore /t:Build;Publish /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin/Publish/x64
 
       - name: Create Zip
         uses: ihiroky/archive-action@v1
