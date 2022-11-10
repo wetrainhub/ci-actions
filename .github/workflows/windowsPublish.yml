@@ -39,6 +39,16 @@ jobs:
           dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
           dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
 
+      - name: Add Sources to NuGet
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+          dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      
+      - name: List Every File
+        run: |
+          dir /s /b /o:gn
+
+
       - name: Build
         run:  msbuild /src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj -t:restore /t:Build;Publish /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin/Publish/x64
 
