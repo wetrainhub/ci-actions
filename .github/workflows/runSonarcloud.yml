@@ -32,5 +32,6 @@ jobs:
         # Optional command arguments to dotnet test
         # Optional extra command arguments the the SonarScanner 'begin' command
         dotnetPreBuildCmd: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+        dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
         sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
 
