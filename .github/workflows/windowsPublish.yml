@@ -31,12 +31,14 @@ jobs:
         with:
           dotnet-version: 6.0.x
           
-      - name: Add GitHub Packages to NuGet
-        run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
-          
-      - name: Add Microsoft Packages to NuGet
-        run: dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      - name: Add Sources to NuGet
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+          dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
 
+      - name: Restore dependencies
+        run: dotnet restore --no-cache --force
+      
       - name: Build
         run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64 -p:version="${{ steps.version.outputs.full_without_prefix }}"
 
