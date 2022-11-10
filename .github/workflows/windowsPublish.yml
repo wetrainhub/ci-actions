@@ -24,7 +24,7 @@ jobs:
         with:
           prefix: 'v'
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
       
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.1
@@ -40,7 +40,7 @@ jobs:
           dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
 
       - name: Build
-        run:  msbuild $GITHUB_WORKSPACE/src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj -t:restore /t:Build;Publish /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin/Publish/x64
+        run:  msbuild src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj -t:restore /t:Build;Publish /p:Configuration=Release /p:Platform=x64 /p:OutputPath=bin/Publish/x64
 
       - name: Create Zip
         uses: ihiroky/archive-action@v1
