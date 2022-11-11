@@ -35,7 +35,7 @@ jobs:
           
       - name: Add Sources to NuGet
         run: |
-          nuget sources add https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -configfile ./nuget.config -name github_pipeline -username ${{  secrets.DSSL_USERNAME }} -password ${{  secrets.DSSL_TOKEN }}  -store-password-in-clear-text
+          nuget sources add https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -configfile ./nuget.config -name github_pipeline -username ${{  secrets.DSSL_USERNAME }} -password ${{  secrets.DSSL_TOKEN }} -StorePasswordInClearText
           nuget sources add https://api.nuget.org/v3/index.json -configfile ./nuget.config -name nuget_pipeline
       
       - name: Navigate to Workspace
