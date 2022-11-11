@@ -23,36 +23,29 @@ jobs:
         id: version
         with:
           prefix: 'v'
+          
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.2
           
       - name: Add Sources to NuGet
         run: |
-          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
-          dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+          nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+          nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      
+      - name: Navigate to Workspace
+        run: cd $GITHUB_WORKSPACE
+
+      - name: Create Build Directory
+        run: mkdir _build
+      
+      - name: Restore Packages
+        run: nuget restore ${{ inputs.project-name }}.sln
 
       - name: Build
-        run:  msbuild src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj /p:Configuration=Release /p:version=${{ inputs.zip-name }}
-
-      - name: Create Zip
-        uses: ihiroky/archive-action@v1
-        with:
-          root_dir: output
-          file_path: ${{ inputs.zip-name }}.zip
-      
-      - uses: BetaHuhn/do-spaces-action@v2
-        with:
-          access_key: ${{ secrets.DO_ACCESS_KEY}}
-          secret_key: ${{ secrets.DO_SECRET_KEY }}
-          space_name: ${{ secrets.DO_SPACE_NAME }}
-          space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: ${{ inputs.zip-name }}.zip
-          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
+        run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:version=${{ inputs.zip-name }}
