@@ -48,7 +48,7 @@ jobs:
         run: nuget restore ${{ inputs.project-name }}.sln
 
       - name: Build
-        run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:version=${{ inputs.zip-name }}
+        run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:version=${{ inputs.zip-name }} -m
         
       - name: Create zip
         uses: ihiroky/archive-action@v1
