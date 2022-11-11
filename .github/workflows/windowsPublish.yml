@@ -62,5 +62,5 @@ jobs:
           secret_key: ${{ secrets.DO_SECRET_KEY }}
           space_name: ${{ secrets.DO_SPACE_NAME }}
           space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: ${{ inputs.zip-name }}.zip
+          source: $GITHUB_WORKSPACE/_build/${{ inputs.zip-name }}.zip
           out_dir: ${{ inputs.project-name }}/${{ steps.version.outputs.full_without_prefix }}
