@@ -25,13 +25,13 @@ jobs:
           prefix: 'v'
           
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1.3
 
       - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.2
+        uses: NuGet/setup-nuget@v1.1.1
           
       - name: Add Sources to NuGet
         run: |
@@ -49,3 +49,18 @@ jobs:
 
       - name: Build
         run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:version=${{ inputs.zip-name }}
+        
+      - name: Create zip
+        uses: ihiroky/archive-action@v1
+        with:
+          root_dir: output
+          file_path: ${{ inputs.zip-name }}.zip
+          
+      - uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: ${{ inputs.zip-name }}.zip
+          out_dir: ${{ inputs.project-name }}/${{ steps.version.outputs.full_without_prefix }}
