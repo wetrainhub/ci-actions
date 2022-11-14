@@ -55,6 +55,7 @@ jobs:
         with:
           root_dir: ./_build
           file_path: deploy.zip
+          verbose: 'true'
           
       - uses: BetaHuhn/do-spaces-action@v2
         with:
