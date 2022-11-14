@@ -54,7 +54,7 @@ jobs:
         uses: ihiroky/archive-action@v1
         with:
           root_dir: ./_build
-          base_dir: '${{ github.workspace }}'
+          base_dir: '::escapeData::${{ github.workspace }}'
           file_path: de.zip
           verbose: 'true'
           
