@@ -47,7 +47,7 @@ jobs:
       - name: Escape Workspace path
         id: escapepath
         run: |
-          path='${{ github.workspace }}'.Replace("\","\\")
+          path='${{ github.workspace }}' -replace "\" , "\\"
           echo "$file" >> $GITHUB_OUTPUT
           echo '${{ steps.escapepath.outputs.filepath }}'
 #         '${{ github.workspace }}'.Replace("\","\\") >> $GITHUB_OUTPUT
