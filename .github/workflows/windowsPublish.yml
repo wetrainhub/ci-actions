@@ -45,7 +45,9 @@ jobs:
         run: mkdir _build
       
       - name: Escape Workspace path
-        run: echo '${{ github.workspace }}'.Replace("\","\\") >> $WORKSPACE_FILEPATH
+        run: |
+          '${{ github.workspace }}'.Replace("\","\\") >> $WORKSPACE_FILEPATH
+          echo '$WORKSPACE_FILEPATH'
       
 #      - name: Restore Packages
 #        run: nuget restore ${{ inputs.project-name }}.sln
