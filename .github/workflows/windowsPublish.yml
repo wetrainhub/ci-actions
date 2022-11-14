@@ -43,39 +43,25 @@ jobs:
 
       - name: Create Build Directory
         run: mkdir _build
-            
-      - name: Clean File Path
-        id: filepath
-        uses: frabert/replace-string-action@v2.0
+                  
+      - name: Restore Packages
+        run: nuget restore ${{ inputs.project-name }}.sln
+        
+      - name: Build
+        run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:outdir="../_build" /p:version="${{ steps.version.outputs.full_without_prefix }}" -m
+        
+      - name: Create zip
+        uses: ihiroky/archive-action@v1
         with:
-          pattern: '(\\)'
-          string: '${{ github.workspace }}'
-          replace-with: '\\'
-
-      - name: Output FilePath
-        run: echo '${{ steps.outputs.filepath.replaced }}'
-
-#         '${{ github.workspace }}'.Replace("\","\\") >> $GITHUB_OUTPUT
-      
-#      - name: Restore Packages
-#        run: nuget restore ${{ inputs.project-name }}.sln
-        
-#      - name: Build
-#        run:  msbuild ${{ inputs.project-name }}.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build" /p:outdir="../_build" /p:version="${{ steps.version.outputs.full_without_prefix }}" -m
-        
-#      - name: Create zip
-#        uses: ihiroky/archive-action@v1
-#        with:
-#          root_dir: ./_build
-#          base_dir: $WORKSPACE_FILEPATH
-#          file_path: de.zip
-#          verbose: 'true'
+          root_dir: _build
+          file_path: de.zip
+          verbose: 'true'
           
-#      - uses: BetaHuhn/do-spaces-action@v2
-#        with:
-#          access_key: ${{ secrets.DO_ACCESS_KEY}}
-#          secret_key: ${{ secrets.DO_SECRET_KEY }}
-#          space_name: ${{ secrets.DO_SPACE_NAME }}
-#          space_region: ${{ secrets.DO_SPACE_REGION }}
-#         source: ./de.zip
-#         out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
+      - uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: de.zip
+          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
