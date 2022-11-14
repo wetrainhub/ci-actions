@@ -39,7 +39,7 @@ jobs:
           nuget sources add -source https://api.nuget.org/v3/index.json -configfile ./nuget.config -name nuget_pipeline
       
       - name: Navigate to Workspace
-        run: cd echo ${{ github.workspace }}
+        run: cd ${{ github.workspace }}
 
       - name: Create Build Directory
         run: mkdir _build
@@ -54,7 +54,7 @@ jobs:
         uses: ihiroky/archive-action@v1
         with:
           root_dir: ./_build
-          base_dir: echo ${{ github.workspace }}
+          base_dir: ${{ github.workspace }}
           file_path: de.zip
           verbose: 'true'
           
