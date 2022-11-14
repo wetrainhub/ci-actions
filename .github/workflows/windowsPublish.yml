@@ -54,21 +54,8 @@ jobs:
         uses: ihiroky/archive-action@v1
         with:
           root_dir: _build
-          file_path: de.zip
+          file_path: ${{ inputs.zip-name }}.zip
           verbose: 'true'
-                 
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: "${{ github.workspace }}/_build"
-
-      - name: Output results
-        run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done
           
 #      - uses: BetaHuhn/do-spaces-action@v2
 #        with:
