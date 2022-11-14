@@ -27,7 +27,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-        -name: Output Env Variables
+      - name: Output Env Variables
         run: |
           echo $GITHUB_WORKSPACE
           echo ${{ github.workspace }}
