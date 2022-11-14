@@ -53,7 +53,7 @@ jobs:
       - name: Create zip
         uses: ihiroky/archive-action@v1
         with:
-          root_dir: ${{ github.workspace }}/_build
+          root_dir: ./_build
           file_path: de.zip
           verbose: 'true'
           
