@@ -54,7 +54,7 @@ jobs:
         uses: ihiroky/archive-action@v1
         with:
           root_dir: ./_build
-          file_path: ${{ github.workspace }}/${{ inputs.zip-name }}.zip
+          file_path: deploy.zip
           
       - uses: BetaHuhn/do-spaces-action@v2
         with:
@@ -62,5 +62,5 @@ jobs:
           secret_key: ${{ secrets.DO_SECRET_KEY }}
           space_name: ${{ secrets.DO_SPACE_NAME }}
           space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: ${{ github.workspace }}/${{ inputs.zip-name }}.zip
+          source: ./_build/deploy.zip
           out_dir: ${{ inputs.project-name }}/${{ steps.version.outputs.full_without_prefix }}
