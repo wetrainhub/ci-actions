@@ -43,13 +43,18 @@ jobs:
 
       - name: Create Build Directory
         run: mkdir _build
-      
-      - name: Escape Workspace path
-        id: escapepath
-        run: |
-          path='${{ github.workspace }}' -replace "\" , "\\"
-          echo "$file" >> $GITHUB_OUTPUT
-          echo '${{ steps.escapepath.outputs.filepath }}'
+            
+      - name: Clean File Path
+        id: filepath
+        uses: frabert/replace-string-action@v2.0
+        with:
+          pattern: '(\\)'
+          string: '${{ github.workspace }}'
+          replace-with: '\\'
+
+      - name: Output FilePath
+        run: echo '${{ steps.outputs.filepath.replaced }}'
+
 #         '${{ github.workspace }}'.Replace("\","\\") >> $GITHUB_OUTPUT
       
 #      - name: Restore Packages
