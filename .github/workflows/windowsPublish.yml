@@ -56,12 +56,25 @@ jobs:
           root_dir: _build
           file_path: de.zip
           verbose: 'true'
-          
-      - uses: BetaHuhn/do-spaces-action@v2
+                 
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
         with:
-          access_key: ${{ secrets.DO_ACCESS_KEY}}
-          secret_key: ${{ secrets.DO_SECRET_KEY }}
-          space_name: ${{ secrets.DO_SPACE_NAME }}
-          space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: ${{ inputs.zip-name }}.zip
-          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
+          path: "${{ github.workspace }}/_build"
+
+      - name: Output results
+        run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
+          
+#      - uses: BetaHuhn/do-spaces-action@v2
+#        with:
+#          access_key: ${{ secrets.DO_ACCESS_KEY}}
+#          secret_key: ${{ secrets.DO_SECRET_KEY }}
+#          space_name: ${{ secrets.DO_SPACE_NAME }}
+#          space_region: ${{ secrets.DO_SPACE_REGION }}
+#          source: ${{ inputs.zip-name }}.zip
+#          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
