@@ -4,16 +4,17 @@ name: Windows Publish
 # separate terms of service, privacy policy, and support
 # documentation.
 
-on:  workflow_call:
-    inputs:
-      zip-name:  
-        description: 'Output zip file name'
-        required: true
-        type: string
-      project-name:  
-        description: 'csproj name'
-        required: true
-        type: string        
+on:  
+    workflow_call:
+        inputs:
+         zip-name:  
+            description: 'Output zip file name'
+            required: true
+            type: string
+         project-name:  
+            description: 'csproj name'
+            required: true
+            type: string        
 jobs:
   build:
     runs-on: windows-2019
