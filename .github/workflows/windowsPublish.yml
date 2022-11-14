@@ -54,7 +54,7 @@ jobs:
         uses: ihiroky/archive-action@v1
         with:
           root_dir: ./_build
-          base_dir: $GITHUB_WORKSPACE
+          base_dir: echo $GITHUB_WORKSPACE
           file_path: de.zip
           verbose: 'true'
           
