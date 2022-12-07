@@ -33,10 +33,6 @@ on:
         description: 'path to dockerfile'
         required: true
         type: string
-      version-suffix:  
-        description: 'beta if not a tag/release'
-        required: false
-        type: string
         
 jobs:
   build:
@@ -84,7 +80,7 @@ jobs:
         with:
           images: ${{ inputs.registry }}/${{ inputs.image-name }}          
           tags: |
-            type=ref,event=branch,suffix=-beta
+            #type=ref,event=branch,suffix=-beta
             type=semver,pattern={{version}}
             type=raw,value=latest,enable=false
 
@@ -107,7 +103,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: VERSION=${{ steps.meta.outputs.version }}${{ inputs.version-suffix }}
+          build-args: VERSION=${{ steps.meta.outputs.version }}
 
 
       # Sign the resulting Docker image digest except on PRs.
