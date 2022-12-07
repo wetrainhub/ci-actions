@@ -83,6 +83,9 @@ jobs:
             #type=ref,event=branch,suffix=-beta
             type=semver,pattern={{version}}
             type=raw,value=latest,enable=false
+      - name: Set version number
+        run: sed -i "s/\(<Version>\([0-9]\+\.\)\{2\}\)\([0-9]\+\)/\1${{github.run_number}}/" *.csproj
+
 
       - name: add private GitHub registry to NuGet
         run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
