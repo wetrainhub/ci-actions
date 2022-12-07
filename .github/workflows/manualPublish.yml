@@ -43,7 +43,7 @@ jobs:
 
       
       - name: Build
-        run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64 -p:version="${{ steps.version.outputs.full_without_prefix }}"
+        run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64
 
       - name: Create zip
         uses: ihiroky/archive-action@v1
