@@ -1,4 +1,4 @@
-name: Docker Publish
+name: Manual Publish
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -37,6 +37,10 @@ jobs:
       
       - name: add nuget feed
         run: dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      
+      - name: Set version number
+        run: sed -i 's/<Version>\(.*\)<\/Version>/<Version>${{ steps.meta.outputs.version }}<\/Version>/' src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj
+
       
       - name: Build
         run:  dotnet publish src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./output --verbosity q -c Release --self-contained true --runtime win-x64 -p:version="${{ steps.version.outputs.full_without_prefix }}"
