@@ -39,7 +39,7 @@ jobs:
         run: dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
       
       - name: Set version number
-        run: sed -i 's/<Version>\(.*\)<\/Version>/<Version>${{ steps.meta.outputs.version }}<\/Version>/' src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj
+        run: sed -i 's/<Version>\(.*\)<\/Version>/<Version>${{ steps.version.outputs.full_without_prefix }}<\/Version>/' src/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj
 
       
       - name: Build
