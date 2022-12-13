@@ -48,23 +48,20 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore --no-cache --force
       
+      - uses: nowsprinting/check-version-format-action@v3
+        id: version
+        with:
+          prefix: 'v'
+          
+      - name: Set version number
+        run: sed -i 's/<Version>\(.*\)<\/Version>/<Version>${{ steps.version.outputs.full_without_prefix }}<\/Version>/' ${{ github.workspace }}/src/*/*.csproj   
+          
       - name: Build
         run: dotnet build --no-restore
-        
-      - name: Create live Package
+               
+      - name: Create package
         run: dotnet pack --configuration Release
-        if: startsWith(inputs.event-ref, 'refs/tags/v')
-          
-      - name: Create alpha Package
-        run: |
-          echo "alpha.${{ needs.variables.outputs.alpha-release }}"
-          dotnet pack --configuration Release --version-suffix "alpha.${{ needs.variables.outputs.alpha-release }}"
-        if: startsWith(inputs.event-ref, 'refs/tags/v') != true
-        
-      - name: check delete
-        run: |
-          echo ${{ steps.packagenames.outputs.package_names }}
-          
+         
       - name: Delete release packages
         uses: Digital-Secure-Systems-Limited/CI-Actions-DeleteRepoPackageVersion@main
         id: delete-nuget
@@ -72,10 +69,7 @@ jobs:
           package-token: ${{ secrets.DSSL_TOKEN }}
           package-version: ${{ github.ref_name }}
           package-names: ${{ steps.packagenames.outputs.package_names }}
-        if: startsWith(inputs.event-ref, 'refs/tags/v')
-      
-      
-      
+
       - name: Copy files for cache
         run: |
           mkdir -p ${{ github.workspace }}/cache
