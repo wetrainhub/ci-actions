@@ -5,7 +5,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.prepare.outputs.packages }}
+      matrix: ${{ steps.setmatrix.outputs.matrix }}
     steps:
       - uses: nowsprinting/check-version-format-action@v3
         id: version
@@ -18,7 +18,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Get folders in src
-        id: set-packagename-matrix
+        id: setmatrix
         run: |
           packages=`ls -m ${{ github.workspace }}/src/plugins`
           packages=$(echo $packages | tr '\n' ' ')
