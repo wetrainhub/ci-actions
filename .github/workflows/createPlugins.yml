@@ -14,3 +14,52 @@ on:
         description: 'cache-key'
         required: true
         type: string
+jobs:
+  variables:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nowsprinting/check-version-format-action@v3
+        id: version
+        with:
+          prefix: 'v'
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+        
+      - name: Adding NuGet Registries
+        run: |
+         dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
+         dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
+      
+      - name: Get folders in src
+        id: packagenames
+        run: |
+           packages=`ls -m ${{ github.workspace }}/src/`
+           packages=$(echo $packages | tr '\n' ' ')
+           echo "package_names=$packages" >> $GITHUB_OUTPUT
+            
+           
+       # BUILD THE STUFF
+       # PUBLISH THE STUFF
+       # CREATE THE STUFF
+
+
+      - name: Create zip
+        uses: ihiroky/archive-action@v1
+        with:
+          root_dir: output
+          file_path: plugins.zip
+      
+      - name: "Push to DigitalOcean"
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: plugins.zip
+          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}

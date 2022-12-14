@@ -55,7 +55,6 @@ jobs:
         with:
           root_dir: src/_build
           file_path: ${{ inputs.zip-name }}.zip
-          verbose: 'true'
           
       - uses: BetaHuhn/do-spaces-action@v2
         with:
