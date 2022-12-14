@@ -42,16 +42,19 @@ jobs:
            packages=$(echo $packages | tr '\n' ' ')
            echo "package_names=$packages" >> $GITHUB_OUTPUT
             
-           
-       # BUILD THE STUFF
-       # PUBLISH THE STUFF
-       # CREATE THE STUFF
+      - name: Navigate to Workspace
+        run: cd ${{ github.workspace }}
 
-
+      - name: Create Build Directory
+        run: mkdir _build
+                  
+      - name: Build
+        run:  dotnet publish src/plugins/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./build --verbosity q -c Release --self-contained true --runtime win-x64
+               
       - name: Create zip
         uses: ihiroky/archive-action@v1
         with:
-          root_dir: output
+          root_dir: src/_build
           file_path: plugins.zip
       
       - name: "Push to DigitalOcean"
