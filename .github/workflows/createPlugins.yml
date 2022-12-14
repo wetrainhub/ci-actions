@@ -1,0 +1,16 @@
+name: 'Create Plugins'
+on:
+  workflow_call:
+    inputs:
+      event-ref:  
+        description: 'github.event.ref'
+        required: true
+        type: string
+      ref-name:  
+        description: 'github.ref_name'
+        required: true
+        type: string
+      ref-cache-key:  
+        description: 'cache-key'
+        required: true
+        type: string
