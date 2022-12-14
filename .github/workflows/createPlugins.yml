@@ -5,7 +5,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.prepare.outputs.matrix }}
+      matrix: ${{ steps.prepare.outputs.packages }}
     steps:
       - uses: nowsprinting/check-version-format-action@v3
         id: version
@@ -27,18 +27,19 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ steps.prepare.outputs.matrix }}
+      matrix:
+        package: ${{ steps.prepare.outputs.packages }}
     steps:
       - name: Adding NuGet Registries
         run: |
           dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{ secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
           dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
-      - name: Navigate to Workspacerun
+      - name: Navigate to Workspace
         run: cd ${{ github.workspace }}
       - name: Create Build Directory
         run: mkdir _build
       - name: Build
-        run: dotnet publish src/plugins/${{ inputs.project-name }}/${{ inputs.project-name }}.csproj --output ./build --verbosity q -c Release
+        run: dotnet publish src/plugins/${{ matrix.package }}/${{ matrix.package }}.csproj --output ./build --verbosity q -c Release
       - name: Create zip
         uses: ihiroky/archive-action@v1
         with:
