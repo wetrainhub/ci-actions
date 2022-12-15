@@ -24,7 +24,7 @@ jobs:
           packages=$(echo $packages | tr '\n' ' ')
           #packageNames=$(echo "$packages" |sed 's/,/\", \"/g')
           output=$(echo '["$packages"]')
-          echo "::set-output name=matrix:: $output
+          echo "::set-output name=matrix::$output
   create:
     needs: prepare
     runs-on: ubuntu-latest
