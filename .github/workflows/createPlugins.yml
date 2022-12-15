@@ -1,6 +1,6 @@
 name: Create Plugins
 on:
-  workflow_call: null
+  workflow_call:
 jobs:
   prepare:
     runs-on: ubuntu-latest
