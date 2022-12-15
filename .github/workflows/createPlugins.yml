@@ -27,8 +27,7 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        package: ${{ needs.prepare.outputs.matrix }}
+      matrix: ${{ needs.prepare.outputs.matrix }}
     steps:
       - name: Adding NuGet Registries
         run: |
@@ -39,7 +38,7 @@ jobs:
       - name: Create Build Directory
         run: mkdir _build
       - name: Build
-        run: dotnet publish src/plugins/${{ package }}/${{ package }}.csproj --output ./build --verbosity q -c Release
+        run: dotnet publish src/plugins/${{ matrix }}/${{ matrix }}.csproj --output ./build --verbosity q -c Release
       - name: Create zip
         uses: ihiroky/archive-action@v1
         with:
