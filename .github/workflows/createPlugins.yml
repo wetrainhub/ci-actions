@@ -23,7 +23,8 @@ jobs:
           packages=`ls -m ${{ github.workspace }}/src/plugins`
           packages=$(echo $packages | tr '\n' ' ')
           #packageNames=$(echo "$packages" |sed 's/,/\", \"/g')
-          output=$(echo "[$(echo "$packages" | tr ',' '","']")
+          packageNames=$(echo "$packages" | tr ',' '","')
+          output=$(echo "[$(echo "$packageNames")]")
           echo "::set-output name=matrix::$output"
   create:
     needs: prepare
