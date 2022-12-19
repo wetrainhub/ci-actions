@@ -23,8 +23,7 @@ jobs:
           packages=`ls -m ${{ github.workspace }}/src/plugins`
           packages=$(echo $packages | tr '\n' ' ')
           packageNames=$(echo .'{\"packages\":[\"'. ${packages} .'\"]}'. |sed 's/,/\\",\\"/g')
-          output='${{ toJSON(packageNames)}}'
-          echo "::set-output name=matrix::$(echo ${{output}})"
+          echo "::set-output name=matrix::$(echo ${{packageNames}})"
   create:
     needs: prepare
     runs-on: ubuntu-latest
