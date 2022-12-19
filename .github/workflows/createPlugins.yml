@@ -5,31 +5,19 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.setmatrix.outputs.matrix }}
+      matrix: ${{ steps.prepare.outputs.matrix }}
     steps:
-      - uses: nowsprinting/check-version-format-action@v3
-        id: version
-        with:
-          prefix: v
-      - name: Checkout Repository
-        uses: actions/checkout@master
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Get Project Names
-        id: setmatrix
-        run: |
-          matrix=$(git ls-tree -r --name-only HEAD | awk -v  FD="," '{print $1}')
-          echo "::set-output name=matrix::$matrix"
+    -  uses: actions/checkout@master
+    -  run: |
+        matrix=$(git ls-tree -r --name-only HEAD | awk -v  FD="," '{print $1}')
+        echo "Matrix: $matrix"
+        echo "::set-output name=matrix::$matrix"
   create:
     needs: prepare
     runs-on: ubuntu-latest
+    strategy: 
+      matrix: ${{ needs.create-matrix.outputs.matrix }}
     steps:
-      - uses: nowsprinting/check-version-format-action@v3
-        id: version
-        with:
-          prefix: v
       - name: Checkout Repository
         uses: actions/checkout@master
       - name: Setup .NET
@@ -45,7 +33,7 @@ jobs:
       - name: Create Directories
         run: mkdir _build
       - name: Build
-        run: dotnet publish src/plugins/${{ needs.create-matrix.outputs.matrix }}/${{ needs.create-matrix.outputs.matrix }}.csproj --output ./build --verbosity q -c Release
+        run: dotnet publish src/plugins/${{ inputs.matrix }}/${{ inputs.matrix }}.csproj --output ./build --verbosity q -c Release
       - name: "Archive Plugin"
         uses: actions/upload-artifact@v3
         with:
