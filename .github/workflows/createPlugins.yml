@@ -22,13 +22,13 @@ jobs:
         run: |
           packages=`ls -m ${{ github.workspace }}/src/plugins`
           packages=$(echo $packages | tr '\n' ' ')
-          packages=$(echo '{"packages":["'${packages}'"]}' |sed 's/,/\",\"/g')
+          packages=$(echo '{"packages":["'${packages}'"]}' |sed 's/,\s/\",\"/g')
           echo "::set-output name=matrix::${packages}"
   create:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ needs.prepare.outputs.matrix }}
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     steps:
       - name: Adding NuGet Registries
         run: |
