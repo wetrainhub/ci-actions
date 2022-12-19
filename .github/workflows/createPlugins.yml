@@ -13,7 +13,7 @@ jobs:
       run: |
         plugins=$(git ls-tree -d --name-only HEAD src/plugins | tr '\n' ',')
         echo "Matrix: $matrix"
-        echo "::set-env name=plugins::$plugins"
+        echo ::set-env name=plugins::$plugins
   create:
     needs: prepare
     strategy: 
