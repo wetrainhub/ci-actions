@@ -9,7 +9,7 @@ jobs:
     steps:
     -  uses: actions/checkout@master
     -  run: |
-        matrix=$(git ls-tree -r HEAD | find plugins -name "*.csproj" | git ls-tree -r --name-only | awk -v FS="," '{print $1}')
+        matrix=$(git ls-tree -r HEAD | find ${{ github.workspace }}/src/plugins -name "*.csproj" | git ls-tree -r --name-only | awk -v FS="," '{print $1}')
         echo "Matrix: $matrix"
         echo "::set-output name=matrix::$matrix"
   create:
