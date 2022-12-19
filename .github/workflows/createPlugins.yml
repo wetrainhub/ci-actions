@@ -15,8 +15,8 @@ jobs:
   create:
     needs: prepare
     runs-on: ubuntu-latest
-    strategy: 
-      matrix: ${{ needs.create-matrix.outputs.matrix }}
+    inputs:
+      matrix: ${{ steps.prepare.outputs.matrix }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@master
