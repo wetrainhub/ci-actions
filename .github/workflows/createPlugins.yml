@@ -11,9 +11,9 @@ jobs:
       uses: actions/checkout@master
     - name: Get Plugin names
       run: |
-        matrix=$(git ls-tree -d --name-only HEAD src/plugins | tr '\n' ',')
+        plugins=$(git ls-tree -d --name-only HEAD src/plugins | tr '\n' ',')
         echo "Matrix: $matrix"
-        echo "::set-env name=plugins::$matrix"
+        echo "::set-env name=plugins::$plugins"
   create:
     needs: prepare
     strategy: 
