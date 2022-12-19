@@ -20,15 +20,11 @@ jobs:
       - name: Get Project Names
         id: setmatrix
         run: |
-          packages=`ls -m ${{ github.workspace }}/src/plugins`
-          packages=$(echo $packages | tr '\n' ' ')
-          packages=$(echo '{"packages":["'${packages}'"]}' |sed 's/,\s/\",\"/g')
-          echo "::set-output name=matrix::${packages}"
+          matrix=$(git ls-tree -r --name-only HEAD | awk -v  FD="," '{print $1}')
+          echo "::set-output name=matrix::$matrix"
   create:
     needs: prepare
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
     steps:
       - uses: nowsprinting/check-version-format-action@v3
         id: version
@@ -49,7 +45,7 @@ jobs:
       - name: Create Directories
         run: mkdir _build
       - name: Build
-        run: dotnet publish src/plugins/${{ matrix }}/${{ matrix }}.csproj --output ./build --verbosity q -c Release
+        run: dotnet publish src/plugins/${{ needs.create-matrix.outputs.matrix }}/${{ needs.create-matrix.outputs.matrix }}.csproj --output ./build --verbosity q -c Release
       - name: "Archive Plugin"
         uses: actions/upload-artifact@v3
         with:
