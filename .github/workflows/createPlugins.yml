@@ -28,7 +28,7 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.prepare.outputs.matrix)}}
+      matrix: ${{ needs.prepare.outputs.matrix }}
     steps:
       - name: Adding NuGet Registries
         run: |
