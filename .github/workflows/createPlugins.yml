@@ -9,14 +9,12 @@ jobs:
     steps:
     -  uses: actions/checkout@master
     -  run: |
-        matrix=$(git ls-tree -r --name-only HEAD | awk -v  FD="," '{print $1}')
+        matrix=$(git ls-tree -r HEAD | find plugins -name "*.csproj" | git ls-tree -r --name-only | awk -v FS="," '{print $1}')
         echo "Matrix: $matrix"
         echo "::set-output name=matrix::$matrix"
   create:
     needs: prepare
     runs-on: ubuntu-latest
-    inputs:
-      matrix: ${{ steps.prepare.outputs.matrix }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@master
@@ -33,12 +31,12 @@ jobs:
       - name: Create Directories
         run: mkdir _build
       - name: Build
-        run: dotnet publish src/plugins/${{ inputs.matrix }}/${{ inputs.matrix }}.csproj --output ./build --verbosity q -c Release
+        run: dotnet publish src/plugins/${{ needs.prepare.outputs.matrix }}/${{ needs.prepare.outputs.matrix }}.csproj --output ./build --verbosity q -c Release
       - name: "Archive Plugin"
         uses: actions/upload-artifact@v3
         with:
-           name: ${{ matrix }}
-           path: _build/${{ matrix }}
+           name: ${{ needs.prepare.outputs.matrix }}
+           path: _build/${{ needs.prepare.outputs.matrix }}
   upload: 
     runs-on: ubuntu-latest
     needs: create
