@@ -26,17 +26,14 @@ jobs:
     - name: Add Sources to NuGet
       run: |
          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github_pipeline --username ${{  secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
-      
-    - name: Restore dependencies
-      run: dotnet restore --no-cache --force
-    
+         
     - name: Find csproj files and publish them
       run: |
         csproj_files=$(find src/plugins -name "*.csproj")
         for csproj in $csproj_files; do
           project_name=$(basename "$csproj" .csproj)
           mkdir -p "PaymentPlugins/$project_name"
-          dotnet publish "$csproj" -o "PaymentPlugins/$project_name" 
+          dotnet build "$csproj" -o "PaymentPlugins/$project_name" 
         done
         
     - name: Create zip file
