@@ -7,13 +7,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.0.x
       - uses: actions/checkout@v2
 
       - name: Create a new directory
         run: mkdir build
+
+      - name: List directories
+        run: ls -d */
 
       - name: List project files
         run: dotnet list -v normal --path ./src/plugins | grep "Project" | awk '{print $2}' > projects.txt
