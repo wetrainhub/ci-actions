@@ -10,6 +10,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Create a new directory
+        run: mkdir build
+
       - name: Get list of Dotnet projects in plugins folder
         run: |
           dotnet list -v normal --path ./plugins | grep "Project" | awk '{print $2}' > projects.txt
@@ -17,11 +20,11 @@ jobs:
       - name: Publish each project
         run: |
           for project in $(cat projects.txt); do
-          dotnet publish $project -o ./plugins/$project
+          dotnet publish $project -o ./build/plugins/$project
           done
 
       - name: Zip plugins folder
-        run: zip -r plugins.zip ./plugins
+        run: zip -r plugins.zip ./build/plugins
 
       - name: Push to DigitalOcean
         uses: BetaHuhn/do-spaces-action@v2
@@ -30,5 +33,5 @@ jobs:
           secret_key: ${{ secrets.DO_SECRET_KEY }}
           space_name: ${{ secrets.DO_SPACE_NAME }}
           space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: plugins.zip
+          source: ./plugins.zip
           out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
