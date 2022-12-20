@@ -15,7 +15,7 @@ jobs:
 
       - name: Get list of Dotnet projects in plugins folder
         run: |
-          dotnet list -v normal --path ./plugins | grep "Project" | awk '{print $2}' > projects.txt
+          dotnet list -v normal --path ./src/plugins | grep "Project" | awk '{print $2}' > projects.txt
 
       - name: Publish each project
         run: |
