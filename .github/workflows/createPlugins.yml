@@ -27,7 +27,7 @@ jobs:
         for csproj in $csproj_files; do
           project_name=$(basename "$csproj" .csproj)
           mkdir -p "Plugins/$project_name"
-          dotnet publish "$csproj" -o "Plugins/$project_name"
+          dotnet publish "$csproj" -o "Plugins/$project_name --nuget-config-path ../../../nuget.config"
         done
         
     - name: Create zip file
