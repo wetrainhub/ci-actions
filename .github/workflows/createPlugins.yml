@@ -1,57 +1,28 @@
-name: Create Plugins
+name: Publish and Deploy Dotnet Plugins
+
 on:
   workflow_call:
+
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.prepare.outputs.matrix }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@master
-    - name: Get Plugin names
-      run: |
-        plugins=$(git ls-tree -d --name-only HEAD src/plugins | tr '\n' ',')
-        echo "Matrix: $matrix"
-        echo ::set-env name=plugins::$plugins
-  create:
-    needs: prepare
-    strategy: 
-      matrix: 
-        plugin: ${{ env.plugins }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@master
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Adding NuGet Registries
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get list of Dotnet projects in plugins folder
         run: |
-          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --configfile ./nuget.config --name github_pipeline --username ${{ secrets.DSSL_USERNAME }} --password ${{  secrets.DSSL_TOKEN }}  --store-password-in-clear-text
-          dotnet nuget add source https://api.nuget.org/v3/index.json --configfile ./nuget.config --name nuget_pipeline
-      - name: "Navigate to Workspace"
-        run: cd ${{ github.workspace }}
-      - name: Create Directories
-        run: mkdir _build
-      - name: Build
-        run: dotnet publish src/plugins/$plugin/$plugin.csproj --output ./build --verbosity q -c Release
-      - name: "Archive Plugin"
-        uses: actions/upload-artifact@v3
-        with:
-           name: $plugin
-           path: _build/$plugin
-  upload: 
-    runs-on: ubuntu-latest
-    needs: create
-    steps:
-      - name: Get DLLs
-        uses: actions/download-artifact@v3
-      - name: Create zip
-        uses: ihiroky/archive-action@v1
-        with:
-          file_path: plugins.zip
+          dotnet list -v normal --path ./plugins | grep "Project" | awk '{print $2}' > projects.txt
+
+      - name: Publish each project
+        run: |
+          for project in $(cat projects.txt); do
+          dotnet publish $project -o ./plugins/$project
+          done
+
+      - name: Zip plugins folder
+        run: zip -r plugins.zip ./plugins
+
       - name: Push to DigitalOcean
         uses: BetaHuhn/do-spaces-action@v2
         with:
