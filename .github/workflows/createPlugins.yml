@@ -7,35 +7,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: 6.0.x
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - name: Find csproj files and publish them
+      run: |
+        csproj_files=$(find src/plugins -name "*.csproj")
+        for csproj in $csproj_files; do
+          project_name=$(basename "$csproj" .csproj)
+          mkdir -p "Plugins/$project_name"
+          dotnet publish "$csproj" -o "Plugins/$project_name"
+        done
+        
+    - name: Create zip file
+      run: zip -r plugins.zip Plugins
 
-      - name: Create a new directory
-        run: mkdir build
-
-      - name: List directories
-        run: ls -dR */
-
-      - name: List project files
-        run: dotnet list -v normal --path ./src/plugins | grep "Project" | awk '{print $2}' > projects.txt
-
-      - name: Publish each project
-        run: |
-          for project in $(cat projects.txt); do
-          dotnet publish $project -o ./build/plugins/$project
-          done
-
-      - name: Zip plugins folder
-        run: zip -r plugins.zip ./build/plugins
-
-      - name: Push to DigitalOcean
-        uses: BetaHuhn/do-spaces-action@v2
-        with:
-          access_key: ${{ secrets.DO_ACCESS_KEY}}
-          secret_key: ${{ secrets.DO_SECRET_KEY }}
-          space_name: ${{ secrets.DO_SPACE_NAME }}
-          space_region: ${{ secrets.DO_SPACE_REGION }}
-          source: ./plugins.zip
-          out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
+    - name: Push to DigitalOcean
+      uses: BetaHuhn/do-spaces-action@v2
+      with:
+        access_key: ${{ secrets.DO_ACCESS_KEY}}
+        secret_key: ${{ secrets.DO_SECRET_KEY }}
+        space_name: ${{ secrets.DO_SPACE_NAME }}
+        space_region: ${{ secrets.DO_SPACE_REGION }}
+        source: ./plugins.zip
+        out_dir: dc-web/${{ steps.version.outputs.full_without_prefix }}
