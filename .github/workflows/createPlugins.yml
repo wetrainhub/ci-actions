@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NUGET_CONFIG_PATH: /nuget.config
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -27,7 +29,7 @@ jobs:
         for csproj in $csproj_files; do
           project_name=$(basename "$csproj" .csproj)
           mkdir -p "Plugins/$project_name"
-          dotnet publish "$csproj" -o "Plugins/$project_name" --nuget-config-path /nuget.config
+          dotnet publish "$csproj" -o "Plugins/$project_name" 
         done
         
     - name: Create zip file
