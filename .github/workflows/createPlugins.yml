@@ -22,6 +22,9 @@ jobs:
       run: |
           nuget sources add -source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -configfile ./nuget.config -name github_pipeline -username ${{  secrets.DSSL_USERNAME }} -password ${{ secrets.DSSL_TOKEN }} -StorePasswordInClearText
           nuget sources add -source https://api.nuget.org/v3/index.json -configfile ./nuget.config -name nuget_pipeline
+      
+    - name: Restore dependencies
+      run: dotnet restore --no-cache --force
     
     - name: Find csproj files and publish them
       run: |
