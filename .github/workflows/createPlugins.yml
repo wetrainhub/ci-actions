@@ -9,6 +9,11 @@ jobs:
     env:
       NUGET_CONFIG_PATH: ./nuget.config
     steps:
+    - uses: nowsprinting/check-version-format-action@v3
+      id: version
+      with:
+        prefix: 'v'
+        
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -30,12 +35,12 @@ jobs:
         csproj_files=$(find src/plugins -name "*.csproj")
         for csproj in $csproj_files; do
           project_name=$(basename "$csproj" .csproj)
-          mkdir -p "PluginsDLL/$project_name"
-          dotnet publish "$csproj" -o "Plugins/$project_name" 
+          mkdir -p "PaymentPlugins/$project_name"
+          dotnet publish "$csproj" -o "PaymentPlugins/$project_name" 
         done
         
     - name: Create zip file
-      run: zip -r plugins.zip PluginsDLL
+      run: zip -r plugins.zip PaymentPlugins
 
     - name: Push to DigitalOcean
       uses: BetaHuhn/do-spaces-action@v2
