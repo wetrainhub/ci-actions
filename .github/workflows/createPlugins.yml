@@ -16,7 +16,7 @@ jobs:
         run: mkdir build
 
       - name: List directories
-        run: ls -d */
+        run: ls -dR */
 
       - name: List project files
         run: dotnet list -v normal --path ./src/plugins | grep "Project" | awk '{print $2}' > projects.txt
